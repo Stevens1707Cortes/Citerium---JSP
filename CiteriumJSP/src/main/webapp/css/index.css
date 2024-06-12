@@ -1,0 +1,71 @@
+
+main{
+    color: aliceblue;
+    font-family: "Roboto Slab";
+}
+
+label{
+    text-align: center;
+}
+
+input{
+    text-align: center;
+}
+
+footer{
+    font-family: "Roboto Slab";
+}
+
+.contenedor{
+
+    border-radius: 2em;
+}
+
+#logo{
+    width: 13em;
+    border-radius: 1em;
+}
+
+.contenido p{
+    margin-top: 1em;
+}
+
+.contenido li{
+    color: rgb(4, 145, 98);
+}
+
+.contenido a{
+    color: rgb(13, 48, 129);
+}
+
+.formularioInput{
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.formularioInput h3{
+    margin-bottom: 1em;
+}
+
+.listaProductos{
+    border: 1px solid black;
+}
+
+.listaProductos tr{
+    border: 1px solid black;
+}
+
+.listaProductos th{
+    border: 1px solid black;
+}
+
+.listaProductos td{
+    border: 1px solid black;
+}
+
+.roboto-slab-citerium {
+  font-family: "Roboto Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
