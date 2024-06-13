@@ -1,4 +1,3 @@
-
 package service;
 
 import dao.UsuarioDAO;
@@ -6,10 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 import model.Usuario;
 
-
 public class UsuarioService {
-    
-     private UsuarioDAO usuarioDAO;
+
+    private UsuarioDAO usuarioDAO;
 
     public UsuarioService(UsuarioDAO usuarioDAO) {
         this.usuarioDAO = usuarioDAO;
