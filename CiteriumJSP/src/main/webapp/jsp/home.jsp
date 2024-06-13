@@ -31,9 +31,9 @@
                 <p>Estas son las principales funciones que Citerium permite usar: </p>
 
                 <ul class="mt-3 mb-6">
-                    <li> <a href="homeInventario_SistemaPos.html"><u>Inventario</u></a> : Ingresar y Eliminar productos.</li>
-                    <li> <a href="homeProducto_SistemaPos.html"><u>Administrar productos</u></a> : Editar los productos que estan en inventario.</li>
-                    <li> <a href="homeVentas_SistemaPos.html"><u>Ventas</u></a> : Ingresar una cantidad de productos para su venta.</li>
+                    <li> <a href="home_Inventario.jsp"><u>Inventario</u></a> : Ingresar y Eliminar productos.</li>
+                    <li> <a href="home_Producto.jsp"><u>Administrar productos</u></a> : Editar los productos que estan en inventario.</li>
+                    <li> <a href="home_Ventas.jsp"><u>Ventas</u></a> : Ingresar una cantidad de productos para su venta.</li>
                 </ul>
             </div>
         </div>

@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de Sesion - Sistema POS: Citerium</title>
-    <link rel="icon" type="image/png" href="/img/favicons/favicon.png">
+    <link rel="icon" type="image/png" href="./img/favicons/favicon.png">
     <link rel="stylesheet" href="css/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
             </div>
           
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-              <form class="space-y-6" action="home_SistemaPos.html" method="GET">
+              <form class="space-y-6" action="jsp/home.jsp" method="GET">
                 <div>
                   <label for="usuario" class="block text-sm font-medium leading-6 text-gray-100">Usuario</label>
                   <div class="mt-2">
@@ -55,7 +55,7 @@
           
               <div class="mt-6 text-center text-sm">
                 
-                <a href="registro_Usuario.html" class="font-semibold leading-6 text-amber-300 hover:text-indigo-950">Registrarse</a>
+                <a href="jsp/registro_Usuario.jsp" class="font-semibold leading-6 text-amber-300 hover:text-indigo-950">Registrarse</a>
               </div>
             </div>
           </div>
