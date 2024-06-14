@@ -29,25 +29,36 @@
                                         <th class="px-4 py-2 bg-teal-400">Nombre</th>
                                         <th class="px-4 py-2 bg-teal-400">Código</th>
                                         <th class="px-4 py-2 bg-teal-400">Cantidad</th>
-                                        <th class="px-4 py-2 bg-teal-400">Precio</th
+                                        <th class="px-4 py-2 bg-teal-400">Precio</th>
                                         <th class="px-4 py-2 bg-teal-400">Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaVentas">
-                    
-                                      
+
+
                                 </tbody>
                             </table>
                             <div class="h-10 w-1/5 mx-auto mt-8 text-center text-xl">
                                 <h2 id="totalVenta">Total: $0</h2>
                             </div>
+                            <div class="h-10 w-1/5 mx-auto mt-8 text-center text-xl">
+                                <button id="btnComprar" class="flex m-auto w-1/2 justify-center rounded-md bg-lime-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-lime-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"" type="submit">Realizar Venta</button>
+                            </div>
                         </div>
+                    </div>
+
+                    <div id="infoCompra" class="h-full lg:w-3/6 md:w-4/6 m-auto mt-3 py-8 px-6 text-center text-gray-600 rounded-xl border border-gray-200 bg-gradient-to-r from-indigo-100 to-cyan-100" style="display: none;">
+                        <h2 class="text-2xl text-cyan-900">Resumen de Compra</h2>
+                        <ul id="listaProductos" class="text-center mt-4"></ul>
+                        <p id="totalCompra" class="text-xl mt-4"></p>
+                        <button id="btnFinalizar" class="flex m-auto w-1/4 justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"" type="submit">Finalizar</button>
                     </div>
 
                     <div class="md:col-span-1 lg:col-span-1" >
                         <div class="h-full lg:w-3/6 md:w-4/6 m-auto mt-3 py-8 px-6 text-center text-gray-600 rounded-xl border border-gray-200 bg-gradient-to-r from-indigo-100 to-cyan-100">
                             <form id="formularioVentas" method="GET" action="/CiteriumJSP/ventasServlet">
                                 <div>
+                                    <h1 class="text-2xl text-cyan-900">Producto</h1>
                                     <div class="formularioInput">   
                                         <h3>Codigo de referencia</h3>
                                         <input type="number" name="codigo" id="codigo" placeholder="13450048" required>

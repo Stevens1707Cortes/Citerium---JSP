@@ -26,6 +26,27 @@ footer{
     border-radius: 1em;
 }
 
+#infoCompra h2 {
+    font-size: 1.5rem;
+    color: #0e7490; /* Color del texto */
+    margin-bottom: 1rem;
+}
+
+#infoCompra ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#infoCompra ul li {
+    margin-bottom: 0.5rem;
+}
+
+#infoCompra #totalCompra {
+    font-size: 1.25rem;
+    color: #0e7490; /* Color del texto */
+    margin-top: 1rem;
+}
+
 .contenido p{
     margin-top: 1em;
 }
