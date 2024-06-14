@@ -1,6 +1,6 @@
 function cargarProductos() {
     $.ajax({
-        url: '/CiteriumJSP/productosServlet', // URL del servlet que devuelve los productos
+        url: '/CiteriumJSP/productosServlet', //Servlet
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -24,6 +24,7 @@ function mostrarProductosEnTabla(productos) {
                     '<td class="px-4 py-2 border">' + producto.categoria + '</td>' +
                     '<td class="px-4 py-2 border">' + producto.fecha + '</td>' +
                     '<td class="px-4 py-2 border">' + producto.unidades + '</td>' +
+                    '<td class="px-4 py-2 border">' + '$ ' + producto.precio + '</td>' +
                   '</tr>';
         tbody.append(row);
     });

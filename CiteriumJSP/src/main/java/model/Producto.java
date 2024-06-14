@@ -10,6 +10,7 @@ public class Producto {
     private String categoria;
     private String fecha;
     private int unidades;
+    private double precio;
     
     //Constructor
     
@@ -20,21 +21,23 @@ public class Producto {
         this.id = id;
     }
     
-    public Producto(String nombre, int codigo, String categoria, String fecha, int unidades) {
+    public Producto(String nombre, int codigo, String categoria, String fecha, int unidades, double precio) {
         this.nombre = nombre;
         this.codigo = codigo;
         this.categoria = categoria;
         this.fecha = fecha;
         this.unidades = unidades;
+        this.precio = precio;
     }
 
-    public Producto(int id, String nombre, int codigo, String categoria, String fecha, int unidades) {
+    public Producto(int id, String nombre, int codigo, String categoria, String fecha, int unidades, double precio) {
         this.id = id;
         this.nombre = nombre;
         this.codigo = codigo;
         this.categoria = categoria;
         this.fecha = fecha;
         this.unidades = unidades;
+        this.precio = precio;
     }
     
     //Getter - Setter
@@ -87,6 +90,14 @@ public class Producto {
         this.unidades = unidades;
     }
     
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+    
     // ToString
 
     @Override
@@ -99,6 +110,7 @@ public class Producto {
         sb.append(", categoria=").append(categoria);
         sb.append(", fecha=").append(fecha);
         sb.append(", unidades=").append(unidades);
+        sb.append(", precio=").append(precio);
         sb.append('}');
         return sb.toString();
     }

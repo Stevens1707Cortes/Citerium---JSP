@@ -38,10 +38,11 @@
                                         <th class="px-4 py-2 bg-emerald-300 border">Categoría</th>
                                         <th class="px-4 py-2 bg-emerald-300 border">Fecha</th>
                                         <th class="px-4 py-2 bg-emerald-300 border">Unidades</th>
+                                        <th class="px-4 py-2 bg-emerald-300 border">Precio</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbodyProductos">
-
+                                    <!-- Aqui se inyectan los datos dinamicamente -->
                                 </tbody>
                             </table>
                         </div>
@@ -49,17 +50,18 @@
 
                     <div class="md:col-span-1 lg:col-span-1" >
                         <div class="h-full lg:w-3/6 md:w-4/6 m-auto mt-3 py-8 px-6 text-center text-gray-600 rounded-xl border border-gray-200 bg-gradient-to-r from-indigo-100 to-cyan-100">
-                            <form id="ingresarProducto">
+                            <form id="ingresarProducto" method="POST" action="/CiteriumJSP/productosServlet">
+                                <input type="hidden" name="action" value="update">
                                 <h1 class="text-2xl text-cyan-900">Editar Producto</h1>
 
                                 <div>
                                     <div class="formularioInput">
                                         <h3>Producto</h3>
-                                        <input type="text" name="producto" id="producto" placeholder="Queso" required>
+                                        <input type="text" name="nombre" id="producto" placeholder="Queso" required>
                                     </div>
                                     <div class="formularioInput">   
                                         <h3>Codigo de referencia</h3>
-                                        <input type="number" name="codigoReferencia" id="codigoReferencia" placeholder="13450048" required>
+                                        <input type="number" name="codigo" id="codigoReferencia" placeholder="13450048" required>
                                     </div>
                                     <div class="formularioInput">
                                         <h3>Categoria</h3>
@@ -78,11 +80,15 @@
                                     </div>
                                     <div class="formularioInput">
                                         <h3>Fecha de registro</h3>
-                                        <input type="date" name="fechaRegistro" id="fechaRegistro" required>
+                                        <input type="date" name="fecha" id="fechaRegistro" required>
                                     </div>
                                     <div class="formularioInput">
                                         <h3>Unidades</h3>
                                         <input type="number" name="unidades" id="unidades" placeholder="5" required>
+                                    </div>
+                                    <div class="formularioInput">
+                                        <h3>Precio</h3>
+                                        <input type="number" name="precio" id="precio" placeholder="1200" required>
                                     </div>
                                 </div>
                                 <button class="flex m-auto w-1/4 justify-center rounded-md bg-lime-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-lime-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"" type="submit">Editar</button>

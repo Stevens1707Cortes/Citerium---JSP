@@ -94,8 +94,10 @@ public class ProductoServlet extends HttpServlet {
         String categoria = request.getParameter("categoria").toLowerCase();
         String fecha = request.getParameter("fecha");
         String unidades = request.getParameter("unidades");
+        String precio = request.getParameter("precio");
 
-        Producto productoNuevo = new Producto(nombre, Integer.parseInt(codigo), categoria, fecha, Integer.parseInt(unidades));
+
+        Producto productoNuevo = new Producto(nombre, Integer.parseInt(codigo), categoria, fecha, Integer.parseInt(unidades), Double.parseDouble(precio));
         try {
             productoService.crearProducto(productoNuevo);
         } catch (SQLException ex) {
@@ -109,8 +111,9 @@ public class ProductoServlet extends HttpServlet {
         String categoria = request.getParameter("categoria").toLowerCase();
         String fecha = request.getParameter("fecha");
         String unidades = request.getParameter("unidades");
+        String precio = request.getParameter("precio");
 
-        Producto productoAct = new Producto(nombre, codigo, categoria, fecha, Integer.parseInt(unidades));
+        Producto productoAct = new Producto(nombre, codigo, categoria, fecha, Integer.parseInt(unidades), Double.parseDouble(precio));
         try {
             productoService.actualizarProducto(productoAct);
         } catch (SQLException ex) {

@@ -14,8 +14,8 @@ public class JdbcProductoDAO implements ProductoDAO {
     private static final String SQL_SELECTCODE = "SELECT * FROM producto WHERE codigo = ?";
     private static final String SQL_SELECTID = "SELECT * FROM producto WHERE id_producto = ?";
     private static final String SQL_SELECT = "SELECT * FROM producto";
-    private static final String SQL_INSERT = "INSERT INTO producto(nombre, codigo, categoria, fecha, unidades) VALUES(?,?,?,?,?)";
-    private static final String SQL_UPDATE = "UPDATE producto SET nombre = ?, categoria = ?, fecha = ?, unidades = ? WHERE codigo = ?";
+    private static final String SQL_INSERT = "INSERT INTO producto(nombre, codigo, categoria, fecha, unidades, precio) VALUES(?,?,?,?,?,?)";
+    private static final String SQL_UPDATE = "UPDATE producto SET nombre = ?, categoria = ?, fecha = ?, unidades = ?, precio = ? WHERE codigo = ?";
     private static final String SQL_DELETE = "DELETE FROM producto WHERE codigo = ?";
 
     //Contructor
@@ -38,6 +38,7 @@ public class JdbcProductoDAO implements ProductoDAO {
             psmt.setString(3, producto.getCategoria());
             psmt.setString(4, producto.getFecha());
             psmt.setInt(5, producto.getUnidades());
+            psmt.setDouble(6, producto.getPrecio());
 
             
             registrosInsertados = psmt.executeUpdate(); 
@@ -70,8 +71,9 @@ public class JdbcProductoDAO implements ProductoDAO {
                 String categoria = rs.getString("categoria");
                 String fecha = rs.getString("fecha");
                 int unidades = rs.getInt("unidades");
+                double precio = rs.getDouble("precio");
 
-                producto = new Producto(idProducto, nombre, codigo, categoria, fecha, unidades);
+                producto = new Producto(idProducto, nombre, codigo, categoria, fecha, unidades, precio);
 
                 return producto;
             }
@@ -103,8 +105,9 @@ public class JdbcProductoDAO implements ProductoDAO {
                 String categoria = rs.getString("categoria");
                 String fecha = rs.getString("fecha");
                 int unidades = rs.getInt("unidades");
+                double precio = rs.getDouble("precio");
 
-                producto = new Producto(id, nombre, codigo, categoria, fecha, unidades);
+                producto = new Producto(id, nombre, codigo, categoria, fecha, unidades, precio);
 
                 return producto;
             }
@@ -137,9 +140,10 @@ public class JdbcProductoDAO implements ProductoDAO {
                 String categoria = rs.getString("categoria");
                 String fecha = rs.getString("fecha");
                 int unidades = rs.getInt("unidades");
+                double precio = rs.getDouble("precio");
                 
 
-                producto = new Producto(idUsuario, nombre, codigo, categoria, fecha, unidades);
+                producto = new Producto(idUsuario, nombre, codigo, categoria, fecha, unidades, precio);
 
                 productos.add(producto);
             }
@@ -167,7 +171,9 @@ public class JdbcProductoDAO implements ProductoDAO {
             psmt.setString(2, producto.getCategoria());
             psmt.setString(3, producto.getFecha());
             psmt.setInt(4, producto.getUnidades());
-            psmt.setInt(5, producto.getCodigo());
+            psmt.setDouble(5, producto.getPrecio());
+            psmt.setInt(6, producto.getCodigo());
+            
 
             registrosActualizados = psmt.executeUpdate();
 
