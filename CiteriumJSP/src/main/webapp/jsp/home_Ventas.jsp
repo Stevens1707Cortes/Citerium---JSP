@@ -51,7 +51,7 @@
                         <h2 class="text-2xl text-cyan-900">Resumen de Compra</h2>
                         <ul id="listaProductos" class="text-center mt-4"></ul>
                         <p id="totalCompra" class="text-xl mt-4"></p>
-                        <button id="btnFinalizar" class="flex m-auto w-1/4 justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"" type="submit">Finalizar</button>
+                        <button id="btnFinalizar" class="mt-4 flex m-auto w-1/4 justify-center rounded-md bg-red-500 px-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"" type="submit">Finalizar</button>
                     </div>
 
                     <div class="md:col-span-1 lg:col-span-1" >

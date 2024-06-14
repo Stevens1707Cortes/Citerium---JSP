@@ -54,12 +54,8 @@ function mostrarProductoEnTabla(productos) {
         var index = $(this).data('id'); // Obtener el índice del producto a eliminar
         eliminarProducto(index); // Llamar a la función para eliminar el producto
     });
-
     // Mostrar el total actualizado después de mostrar la tabla
     mostrarTotal(productos);
-    
-    //Dejar vacio el formulario
-    
 }
 
 function mostrarTotal(productos) {
@@ -108,7 +104,11 @@ function realizarCompra() {
 }
 
 function finalizarCompra() {
+    productos = [];
+    var infoCompra = $('#infoCompra');
     
+    infoCompra.hide();
+    mostrarProductoEnTabla(productos);
 }
 
 // Llamar a cargarProducto al cargar la página o cuando sea necesario
