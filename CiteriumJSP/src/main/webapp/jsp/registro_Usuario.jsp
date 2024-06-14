@@ -20,6 +20,21 @@
 </head>
 <body>
     <main>
+        
+        <%
+    // Obtener parámetro de alerta de la URL
+    String alerta = request.getParameter("alerta");
+
+    // Verificar si hay un parámetro de alerta y mostrar la alerta correspondiente
+    if ("usuarioExistente".equals(alerta)) {
+        %>
+        <script>
+            alert("El usuario ya existe. Por favor, elija otro nombre de usuario.");
+        </script>
+        <%
+            }
+        %>
+        
         <form action="/CiteriumJSP/UsuarioServlet" method="POST">
             <div class="min-w-screen min-h-screen bg-gradient-to-r from-slate-900 to-indigo-900 flex items-center justify-center px-5 py-5">
                 <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style="max-width:1000px">

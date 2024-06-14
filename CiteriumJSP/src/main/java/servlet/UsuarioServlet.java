@@ -28,25 +28,25 @@ public class UsuarioServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //Recuperar datos del formulario
-        String nombre = request.getParameter("nombre");
-        String apellido = request.getParameter("apellido");
+        String nombre = request.getParameter("nombre").toLowerCase();
+        String apellido = request.getParameter("apellido").toLowerCase();
         String identificacion = request.getParameter("identificacion");
-        String email = request.getParameter("email");
+        String email = request.getParameter("email").toLowerCase();
         String contrasena = request.getParameter("contrasena");
-        
+
         try {
             //Verificar si el usuario ya existe
             Usuario usuarioExiste = usuarioService.obtenerUsuarioPorNombre(nombre);
             if (usuarioExiste != null) {
-                response.sendRedirect("registro_Usuario?error=usuario_existente");
-            }else{
-            //Crear un usuario nuevo
-            Usuario nuevoUsuario = new Usuario(nombre, apellido, Integer.parseInt(identificacion), email, contrasena);
-            //Insertarlo en la BD
-            usuarioService.crearUsuario(nuevoUsuario);
-            
-            //Redireccionar a inicio de sesion
-            response.sendRedirect("index.jsp");
+                response.sendRedirect(request.getContextPath() + "/jsp/registro_Usuario.jsp?alerta=usuarioExistente");
+            } else {
+                //Crear un usuario nuevo
+                Usuario nuevoUsuario = new Usuario(nombre, apellido, Integer.parseInt(identificacion), email, contrasena);
+                //Insertarlo en la BD
+                usuarioService.crearUsuario(nuevoUsuario);
+
+                //Redireccionar a inicio de sesion
+                response.sendRedirect("index.jsp");
             }
         } catch (SQLException ex) {
             Logger.getLogger(UsuarioServlet.class.getName()).log(Level.SEVERE, null, ex);

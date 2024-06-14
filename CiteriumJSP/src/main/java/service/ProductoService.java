@@ -8,18 +8,23 @@ import model.Producto;
 
 
 public class ProductoService {
-    private ProductoDAO productoDAO;
+    private final ProductoDAO productoDAO;
 
     public ProductoService(ProductoDAO productoDAO) {
         this.productoDAO = productoDAO;
     }
 
     public void crearProducto(Producto producto) throws SQLException {
+        
         productoDAO.ingresarProducto(producto);
     }
 
     public Producto obtenerProducto(int id) throws SQLException {
         return productoDAO.obtenerProducto(id);
+    }
+    
+    public Producto obtenerProductoCodigo(int codigo) throws SQLException {
+        return productoDAO.obtenerProductoCodigo(codigo);
     }
 
     public List<Producto> obtenerTodosLosProductos() throws SQLException {
@@ -30,7 +35,7 @@ public class ProductoService {
         productoDAO.actualizarProducto(producto);
     }
 
-    public void eliminarProducto(int id) throws SQLException {
-        productoDAO.eliminarProducto(id);
+    public void eliminarProducto(int codigo) throws SQLException {
+        productoDAO.eliminarProducto(codigo);
     }
 }

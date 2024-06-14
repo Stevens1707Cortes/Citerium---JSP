@@ -1,85 +1,160 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.google.gson.Gson;
+import dao.JdbcProductoDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Producto;
+import service.ProductoService;
 
-/**
- *
- * @author steve
- */
-@WebServlet("/ProductoServlet")
+@WebServlet("/productosServlet")
 public class ProductoServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductoServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductoServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    //Instancia de Usuario service
+    private ProductoService productoService;
+
+    @Override
+    //Inicializar ProductoService para conexion con la DB
+    public void init() throws ServletException {
+        productoService = new ProductoService(new JdbcProductoDAO());
+    }
+
+    //Obtener productos
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Producto> productos;
+        try {
+            // Obtener la lista de productos desde la capa de servicio
+            productos = productoService.obtenerTodosLosProductos();
+
+            // Convertir la lista de productos a JSON
+            Gson gson = new Gson();
+            String jsonProductos = gson.toJson(productos);
+            System.out.println("JSON de productos: " + jsonProductos); // Registro para verificar el JSON generado
+
+            // Establecer el tipo de contenido de la respuesta como JSON
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            // Escribir la respuesta JSON de los productos al cliente
+            response.getWriter().write(jsonProductos);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            // Manejo de excepciones
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Error al obtener los productos: " + ex.getMessage());
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    //Ingresar, Actualizar, Descontar, Eliminar
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if (null == action) {
+        } else {
+            switch (action) {
+                case "add": {
+                    ingresarProducto(request);
+                    break;
+                }
+                case "update": {
+                    actualizarProducto(request);
+                    break;
+                }
+                case "discount": {
+                    try {
+                        descontarUnidades(request, response);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
+                }
+                case "delete": {
+                    eliminarProducto(request);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/jsp/home_Producto.jsp");
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    private void ingresarProducto(HttpServletRequest request) {
+        String nombre = request.getParameter("nombre").toLowerCase();
+        String codigo = request.getParameter("codigo");
+        String categoria = request.getParameter("categoria").toLowerCase();
+        String fecha = request.getParameter("fecha");
+        String unidades = request.getParameter("unidades");
+
+        Producto productoNuevo = new Producto(nombre, Integer.parseInt(codigo), categoria, fecha, Integer.parseInt(unidades));
+        try {
+            productoService.crearProducto(productoNuevo);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    private void actualizarProducto(HttpServletRequest request) {
+        int codigo = Integer.parseInt(request.getParameter("codigo"));
+        String nombre = request.getParameter("nombre").toLowerCase();
+        String categoria = request.getParameter("categoria").toLowerCase();
+        String fecha = request.getParameter("fecha");
+        String unidades = request.getParameter("unidades");
 
+        Producto productoAct = new Producto(nombre, codigo, categoria, fecha, Integer.parseInt(unidades));
+        try {
+            productoService.actualizarProducto(productoAct);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void descontarUnidades(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int codigo = Integer.parseInt(request.getParameter("codigo"));
+        int unidadesDescontar = Integer.parseInt(request.getParameter("unidades"));
+
+        //Obtener producto
+        Producto producto = productoService.obtenerProductoCodigo(codigo);
+
+        //Verificar si existe
+        if (producto == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Producto no encontrado");
+            return;
+        }
+
+        // Verificar si hay suficientes unidades para descontar
+        if (producto.getUnidades() < unidadesDescontar) {
+            // Enviar respuesta de error indicando que no hay suficientes unidades
+            response.sendRedirect(request.getContextPath() + "/home_Inventario.jsp?alerta=unidadesInsuficientes");
+            return;
+        }
+
+        //Descontar Unidades
+        producto.setUnidades(producto.getUnidades() - unidadesDescontar);
+
+        //Actualizar
+        try {
+            productoService.actualizarProducto(producto);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void eliminarProducto(HttpServletRequest request) {
+        int codigo = Integer.parseInt(request.getParameter("codigo"));
+        try {
+            productoService.eliminarProducto(codigo);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

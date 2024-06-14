@@ -13,10 +13,8 @@ import util.DBUtil;
 
 public class JdbcUsuarioDAO implements UsuarioDAO{
     
-    //Conexiones desde fuera de esta clase
-    private Connection conexionTransaccional;
-    
     private static final String SQL_SELECTID = "SELECT * FROM usuario WHERE id_usuario = ?";
+    private static final String SQL_SELECTNOMBRE = "SELECT * FROM usuario WHERE nombre = ?";
     private static final String SQL_SELECT = "SELECT * FROM usuario";
     private static final String SQL_INSERT = "INSERT INTO usuario(nombre, apellido, identificacion, email, contrasena) VALUES(?,?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE usuario SET nombre = ?, apellido = ?, identificacion = ?, email = ?, contrasena = ? WHERE id_usuario = ?";
@@ -26,11 +24,7 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
 
     public JdbcUsuarioDAO() {
     }
-    
-    public JdbcUsuarioDAO(Connection conexionTransaccional) {
-        this.conexionTransaccional = conexionTransaccional;
-    }
-    
+   
     /*Ingresar un usuario*/
     @Override
     public void ingresarUsuario(Usuario usuario) throws SQLException {
@@ -39,7 +33,7 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         PreparedStatement psmt = null;
 
         try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : DBUtil.getConecction();
+            conn = DBUtil.getConnection();
             psmt = conn.prepareStatement(SQL_INSERT);
 
             psmt.setString(1, usuario.getNombre());
@@ -50,19 +44,13 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
 
             //Estamos alterando el estado de la base de datos
             registrosInsertados = psmt.executeUpdate(); // Este ejecute INSERT INTO, UPDATE, y DELETE
-
+            
+            System.out.println("Ejecuntando query: " + SQL_INSERT);
+            System.out.println("Registros insertados: " + registrosInsertados);
         } finally {
-            try {
-                DBUtil.close(psmt);
-                if (this.conexionTransaccional == null) {
-                    DBUtil.close(conn);
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
+            DBUtil.close(psmt);
+            DBUtil.close(conn);
         }
-        System.out.println("Ejecuntando query: " + SQL_INSERT);
-        System.out.println("Registros insertados: " + registrosInsertados);
     }
 
     @Override
@@ -73,7 +61,7 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         Usuario usuario;
 
         try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : DBUtil.getConecction();
+            conn = DBUtil.getConnection();
             psmt = conn.prepareStatement(SQL_SELECTID);
             psmt.setInt(1, id);
             rs = psmt.executeQuery(); //Este ejecuta los SELECT
@@ -93,10 +81,7 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         } finally {
             DBUtil.close(rs);
             DBUtil.close(psmt);
-            if (this.conexionTransaccional == null) {
-                DBUtil.close(conn);
-            }
-
+            DBUtil.close(conn);
         }
         System.out.println("Ejecuntando query: " + SQL_SELECTID);
         return null;
@@ -109,12 +94,9 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         ResultSet rs = null;
          Usuario usuario;
         List<Usuario> usuarios = new ArrayList<>();
-        /*
-            Este codigo hace referencia a que si hay una conexionTransaccional abierta, esta se mantendra siempre y cuando no sea nula.
-            Si llegase a ser nula, entonces ahi terminaria la transaccion y se cerraria la conexion a la BD.
-             */
+        
         try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : DBUtil.getConecction();
+            conn = DBUtil.getConnection();
             psmt = conn.prepareStatement(SQL_SELECT);
             rs = psmt.executeQuery();
 
@@ -134,9 +116,7 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         } finally {
             DBUtil.close(rs);
             DBUtil.close(psmt);
-            if (this.conexionTransaccional == null) {
-                DBUtil.close(conn);
-            }
+            DBUtil.close(conn);
         }
         System.out.println("Ejecuntando query: " + SQL_SELECT);
         return usuarios;
@@ -150,7 +130,7 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         PreparedStatement psmt = null;
 
         try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : DBUtil.getConecction();
+            conn = DBUtil.getConnection();
             psmt = conn.prepareStatement(SQL_UPDATE);
 
             psmt.setString(1, usuario.getNombre());
@@ -163,14 +143,8 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
             registrosActualizados = psmt.executeUpdate();
 
         } finally {
-            try {
-                DBUtil.close(psmt);
-                if (this.conexionTransaccional == null) {
-                    DBUtil.close(conn);
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
+            DBUtil.close(psmt);
+            DBUtil.close(conn);
         }
         System.out.println("Ejecuntando query: " + SQL_UPDATE);
         System.out.println("Registros actualizados: " + registrosActualizados);
@@ -183,20 +157,14 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         PreparedStatement psmt = null;
 
         try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : DBUtil.getConecction();
+            conn = DBUtil.getConnection();
             psmt = conn.prepareStatement(SQL_DELETE);
             psmt.setInt(1, id);
             registrosEliminados = psmt.executeUpdate();
 
         } finally {
-            try {
-                DBUtil.close(psmt);
-                if (this.conexionTransaccional == null) {
-                    DBUtil.close(conn);
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            }
+            DBUtil.close(psmt);
+            DBUtil.close(conn);
         }
         System.out.println("Ejecuntando query: " + SQL_DELETE);
         System.out.println("Registros eliminados: " + registrosEliminados);
@@ -210,8 +178,8 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         Usuario usuario;
 
         try {
-            conn = this.conexionTransaccional != null ? this.conexionTransaccional : DBUtil.getConecction();
-            psmt = conn.prepareStatement(SQL_SELECTID);
+            conn =  DBUtil.getConnection();
+            psmt = conn.prepareStatement(SQL_SELECTNOMBRE);
             psmt.setString(1, nombre);
             rs = psmt.executeQuery(); //Este ejecuta los SELECT
 
@@ -229,12 +197,9 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         } finally {
             DBUtil.close(rs);
             DBUtil.close(psmt);
-            if (this.conexionTransaccional == null) {
-                DBUtil.close(conn);
-            }
-
+            DBUtil.close(conn);
         }
-        System.out.println("Ejecuntando query: " + SQL_SELECT);
+        System.out.println("Ejecuntando query: " + SQL_SELECTNOMBRE);
         return null;
     }
     

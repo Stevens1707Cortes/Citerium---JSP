@@ -5,10 +5,19 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Producto" %>
 <!DOCTYPE html>
 <html class="bg-gradient-to-r from-sky-800 to-cyan-600" lang="en">
     <head>
         <%@ include file="components/head.jsp" %>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="../js/cargarProductos.js"></script>
+        <script>
+            $(document).ready(function () {
+                cargarProductos(); // Cargar productos al cargar la página
+            });
+        </script>
     </head>
     <body>
         <%@ include file="components/header.jsp" %>
@@ -31,21 +40,7 @@
                                         <th class="px-4 py-2 bg-emerald-300 border">Unidades</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="border px-4 py-2">Producto 1</td>
-                                        <td class="border px-4 py-2">123</td>
-                                        <td class="border px-4 py-2">Categoría A</td>
-                                        <td class="border px-4 py-2">2024-04-16</td>
-                                        <td class="border px-4 py-2">100</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border px-4 py-2">Producto 2</td>
-                                        <td class="border px-4 py-2">456</td>
-                                        <td class="border px-4 py-2">Categoría B</td>
-                                        <td class="border px-4 py-2">2024-04-16</td>
-                                        <td class="border px-4 py-2">50</td>
-                                    </tr>
+                                <tbody id="tbodyProductos">
 
                                 </tbody>
                             </table>
