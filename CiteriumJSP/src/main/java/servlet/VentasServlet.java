@@ -1,6 +1,7 @@
 package servlet;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import dao.JdbcProductoDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Producto;
@@ -78,6 +80,30 @@ public class VentasServlet extends HttpServlet {
             response.getWriter().write("Error al obtener el producto: " + ex.getMessage());
         } catch (SQLException ex) {
             Logger.getLogger(VentasServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Leer el cuerpo de la solicitud (productos)
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = request.getReader().readLine()) != null) {
+            sb.append(line);
+        }
+
+        // Convertir el JSON recibido en objetos Producto
+        Gson gson = new Gson();
+        List<Producto> productos = gson.fromJson(sb.toString(), new TypeToken<List<Producto>>(){}.getType());
+
+        // Descontar inventario para cada producto
+        try {
+            productoService.descontarInventario(productos); // Descontar inventario con la lista de productos
+            response.setContentType("application/json");
+            response.getWriter().write("{\"success\": true}");
+        } catch (SQLException e) {
+            response.setContentType("application/json");
+            response.getWriter().write("{\"success\": false, \"message\": \"Error al realizar la compra\"}");
         }
     }
 

@@ -160,4 +160,5 @@ public class ProductoServlet extends HttpServlet {
             Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 }

@@ -205,4 +205,32 @@ public class JdbcProductoDAO implements ProductoDAO {
         System.out.println("Registros eliminados: " + registrosEliminados);
     }
 
+    @Override
+    public void descontarInventario(List<Producto> productosSeleccionados) throws SQLException {
+        Connection conn = null;
+        PreparedStatement psmt = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            conn.setAutoCommit(false);  // Inicia la transacción
+
+            psmt = conn.prepareStatement("UPDATE producto SET unidades = unidades - ? WHERE codigo = ?");
+
+            for (Producto producto : productosSeleccionados) {
+                psmt.setInt(1, producto.getUnidades());  // Cantidad a descontar
+                psmt.setInt(2, producto.getCodigo());
+                psmt.addBatch();
+            }
+
+            psmt.executeBatch();
+            conn.commit();  // Confirma los cambios si todo sale bien
+
+        } catch (SQLException e) {
+            if (conn != null) conn.rollback();  // Revierte en caso de error
+            throw e;
+        } finally {
+            DBUtil.close(psmt);
+            DBUtil.close(conn);
+        }
+    }
 }

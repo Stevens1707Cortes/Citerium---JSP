@@ -13,4 +13,5 @@ public interface ProductoDAO {
     List<Producto> obtenerProductos()throws SQLException;
     void actualizarProducto(Producto producto)throws SQLException;
     void eliminarProducto(int codigo)throws SQLException;
+    void descontarInventario(List<Producto> productosSeleccionados) throws SQLException;
 }

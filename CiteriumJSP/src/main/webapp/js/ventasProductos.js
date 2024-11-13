@@ -103,12 +103,50 @@ function realizarCompra() {
     $('#totalCompra').text("Total de la compra: $" + totalCompra.toFixed(2));
 }
 
+
 function finalizarCompra() {
-    productos = [];
+//    productos = [];
+//    var infoCompra = $('#infoCompra');
+//    
+//    infoCompra.hide();
+//    mostrarProductoEnTabla(productos);
+    console.log("Ejecutando la función finalizarCompra"); // Aquí se imprimirá el mensaje de depuración
+
     var infoCompra = $('#infoCompra');
-    
-    infoCompra.hide();
-    mostrarProductoEnTabla(productos);
+    infoCompra.show();
+
+    // Mostrar lista de productos en la compra
+    var listaProductos = $('#listaProductos');
+    listaProductos.empty();
+    var totalCompra = 0;
+
+    productos.forEach(producto => {
+        listaProductos.append(
+            `<li><strong>${producto.nombre}</strong> - Cantidad: ${producto.unidades} - Precio: $${producto.precio}</li>`
+        );
+        totalCompra += producto.precio * producto.unidades;
+    });
+
+    $('#totalCompra').text("Total de la compra: $" + totalCompra.toFixed(2));
+
+    // Llamada AJAX para enviar productos y actualizar inventario
+    $.ajax({
+        url: '/CiteriumJSP/ventasServlet',   // Asegúrate de que esta URL sea correcta
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(productos), // Enviar productos como JSON
+        success: function(response) {
+            console.log("Respuesta del servidor:", response); // Imprime la respuesta del servidor
+            alert('Compra realizada con éxito');
+            productos = []; // Vaciar productos después de la compra
+            mostrarProductoEnTabla(productos); // Limpiar la tabla
+            $('#infoCompra').hide(); // Ocultar la información de la compra
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al realizar la compra:', status, error); // Imprime cualquier error
+            alert('Error al realizar la compra. Inténtelo de nuevo.');
+        }
+    });
 }
 
 // Llamar a cargarProducto al cargar la página o cuando sea necesario

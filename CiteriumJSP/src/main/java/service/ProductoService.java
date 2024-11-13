@@ -38,4 +38,8 @@ public class ProductoService {
     public void eliminarProducto(int codigo) throws SQLException {
         productoDAO.eliminarProducto(codigo);
     }
+    
+    public void descontarInventario(List<Producto> productosSeleccionados) throws SQLException {
+        productoDAO.descontarInventario(productosSeleccionados);
+    }
 }
