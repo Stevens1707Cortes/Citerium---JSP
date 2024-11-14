@@ -10,7 +10,7 @@ import model.Producto;
 import util.DBUtil;
 
 public class JdbcProductoDAO implements ProductoDAO {
-    
+
     private static final String SQL_SELECTCODE = "SELECT * FROM producto WHERE codigo = ?";
     private static final String SQL_SELECTID = "SELECT * FROM producto WHERE id_producto = ?";
     private static final String SQL_SELECT = "SELECT * FROM producto";
@@ -22,7 +22,6 @@ public class JdbcProductoDAO implements ProductoDAO {
     public JdbcProductoDAO() {
     }
 
-
     @Override
     public void ingresarProducto(Producto producto) throws SQLException {
         int registrosInsertados = 0;
@@ -31,7 +30,7 @@ public class JdbcProductoDAO implements ProductoDAO {
 
         try {
             conn = DBUtil.getConnection();
-            psmt = conn.prepareStatement(SQL_INSERT);
+            psmt = conn.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
             psmt.setString(1, producto.getNombre());
             psmt.setInt(2, producto.getCodigo());
@@ -40,8 +39,14 @@ public class JdbcProductoDAO implements ProductoDAO {
             psmt.setInt(5, producto.getUnidades());
             psmt.setDouble(6, producto.getPrecio());
 
-            
-            registrosInsertados = psmt.executeUpdate(); 
+            registrosInsertados = psmt.executeUpdate();
+
+            // Obtener el ID generado
+            ResultSet rs = psmt.getGeneratedKeys();
+            if (rs.next()) {
+                int idGenerado = rs.getInt(1); // El primer valor es el ID generado
+                producto.setId(idGenerado); // Establecemos el ID generado en el objeto Producto
+            }
 
         } finally {
             DBUtil.close(psmt);
@@ -85,7 +90,7 @@ public class JdbcProductoDAO implements ProductoDAO {
         System.out.println("Ejecuntando query: " + SQL_SELECTID);
         return null;
     }
-    
+
     @Override
     public Producto obtenerProductoCodigo(int codigo) throws SQLException {
         Connection conn = null;
@@ -125,9 +130,9 @@ public class JdbcProductoDAO implements ProductoDAO {
         Connection conn = null;
         PreparedStatement psmt = null;
         ResultSet rs = null;
-         Producto producto;
+        Producto producto;
         List<Producto> productos = new ArrayList<>();
-        
+
         try {
             conn = DBUtil.getConnection();
             psmt = conn.prepareStatement(SQL_SELECT);
@@ -141,7 +146,6 @@ public class JdbcProductoDAO implements ProductoDAO {
                 String fecha = rs.getString("fecha");
                 int unidades = rs.getInt("unidades");
                 double precio = rs.getDouble("precio");
-                
 
                 producto = new Producto(idUsuario, nombre, codigo, categoria, fecha, unidades, precio);
 
@@ -173,7 +177,6 @@ public class JdbcProductoDAO implements ProductoDAO {
             psmt.setInt(4, producto.getUnidades());
             psmt.setDouble(5, producto.getPrecio());
             psmt.setInt(6, producto.getCodigo());
-            
 
             registrosActualizados = psmt.executeUpdate();
 
@@ -226,7 +229,9 @@ public class JdbcProductoDAO implements ProductoDAO {
             conn.commit();  // Confirma los cambios si todo sale bien
 
         } catch (SQLException e) {
-            if (conn != null) conn.rollback();  // Revierte en caso de error
+            if (conn != null) {
+                conn.rollback();  // Revierte en caso de error
+            }
             throw e;
         } finally {
             DBUtil.close(psmt);

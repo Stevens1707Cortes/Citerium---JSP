@@ -1,4 +1,3 @@
-
 package dao;
 
 import java.sql.Connection;
@@ -10,21 +9,19 @@ import java.util.List;
 import model.Usuario;
 import util.DBUtil;
 
+public class JdbcUsuarioDAO implements UsuarioDAO {
 
-public class JdbcUsuarioDAO implements UsuarioDAO{
-    
     private static final String SQL_SELECTID = "SELECT * FROM usuario WHERE id_usuario = ?";
     private static final String SQL_SELECTNOMBRE = "SELECT * FROM usuario WHERE nombre = ?";
     private static final String SQL_SELECT = "SELECT * FROM usuario";
     private static final String SQL_INSERT = "INSERT INTO usuario(nombre, apellido, identificacion, email, contrasena) VALUES(?,?,?,?,?)";
     private static final String SQL_UPDATE = "UPDATE usuario SET nombre = ?, apellido = ?, identificacion = ?, email = ?, contrasena = ? WHERE id_usuario = ?";
     private static final String SQL_DELETE = "DELETE FROM usuario WHERE id_usuario = ?";
-    
-    //Contructor
 
+    //Contructor
     public JdbcUsuarioDAO() {
     }
-   
+
     /*Ingresar un usuario*/
     @Override
     public void ingresarUsuario(Usuario usuario) throws SQLException {
@@ -34,7 +31,7 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
 
         try {
             conn = DBUtil.getConnection();
-            psmt = conn.prepareStatement(SQL_INSERT);
+            psmt = conn.prepareStatement(SQL_INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
             psmt.setString(1, usuario.getNombre());
             psmt.setString(2, usuario.getApellido());
@@ -44,9 +41,17 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
 
             //Estamos alterando el estado de la base de datos
             registrosInsertados = psmt.executeUpdate(); // Este ejecute INSERT INTO, UPDATE, y DELETE
-            
+
             System.out.println("Ejecuntando query: " + SQL_INSERT);
             System.out.println("Registros insertados: " + registrosInsertados);
+
+            // Obtener el ID generado
+            ResultSet rs = psmt.getGeneratedKeys();
+            if (rs.next()) {
+                int idGenerado = rs.getInt(1); // El primer valor es el ID generado
+                usuario.setId(idGenerado); // Establecemos el ID generado en el objeto Usuario
+            }
+
         } finally {
             DBUtil.close(psmt);
             DBUtil.close(conn);
@@ -92,9 +97,9 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         Connection conn = null;
         PreparedStatement psmt = null;
         ResultSet rs = null;
-         Usuario usuario;
+        Usuario usuario;
         List<Usuario> usuarios = new ArrayList<>();
-        
+
         try {
             conn = DBUtil.getConnection();
             psmt = conn.prepareStatement(SQL_SELECT);
@@ -107,7 +112,6 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
                 int identificacion = rs.getInt("identificacion");
                 String email = rs.getString("email");
                 String contrasena = rs.getString("contrasena");
-                
 
                 usuario = new Usuario(idUsuario, nombre, apellido, identificacion, email, contrasena);
 
@@ -178,7 +182,7 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         Usuario usuario;
 
         try {
-            conn =  DBUtil.getConnection();
+            conn = DBUtil.getConnection();
             psmt = conn.prepareStatement(SQL_SELECTNOMBRE);
             psmt.setString(1, nombre);
             rs = psmt.executeQuery(); //Este ejecuta los SELECT
@@ -202,5 +206,5 @@ public class JdbcUsuarioDAO implements UsuarioDAO{
         System.out.println("Ejecuntando query: " + SQL_SELECTNOMBRE);
         return null;
     }
-    
+
 }

@@ -1,4 +1,3 @@
-
 package tests;
 
 import dao.JdbcUsuarioDAO;
@@ -21,6 +20,9 @@ public class TestJDBCUsuario {
         usuarios.forEach(u -> {
             System.out.println(u);
         });
+        
+        int id = usuario1.getId();
+        System.out.println(usuarioDao.obtenerUsuario(id));
         
     }
 }
